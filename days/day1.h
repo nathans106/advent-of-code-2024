@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Day.h"
+#include "../Day.h"
 
 #include <algorithm>
 #include <array>
