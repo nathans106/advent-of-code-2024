@@ -102,7 +102,38 @@ MXMXAXMASX)");
     }
 
     auto part2(const Input &input) const -> int override {
-        return 0;
+        std::size_t xmas_count = 0;
+        for (auto x = 0; x < input.csize(); ++x) {
+            const auto& line = input.col(x);
+            for (auto y = 0; y < line.size(); ++y) {
+                const Point point(x, y);
+
+                const auto c = input.at(point).value();
+                if (c != 'A') {
+                    continue;
+                }
+
+                int m_count = 0;
+                int s_count = 0;
+                const auto directions = std::vector<Point>({{1,1}, {1, -1}, {-1, -1}, {-1, 1}});
+                for (const auto& dir : directions) {
+                    auto new_point = point + dir;
+                    auto new_c = input.at(new_point);
+                    if (new_c.has_value() && new_c == 'M') {
+                        m_count++;
+                    }
+                    if (new_c.has_value() && new_c == 'S') {
+                        s_count++;
+                    }
+                }
+
+                if (m_count == 2 && s_count == 2) {
+                    xmas_count++;
+                }
+            }
+        }
+
+        return xmas_count;
     }
 
 };
