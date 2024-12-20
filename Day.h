@@ -1,6 +1,7 @@
 #pragma once
 
 #include <istream>
+#include <sstream>
 
 template<typename InputT>
 class Day {

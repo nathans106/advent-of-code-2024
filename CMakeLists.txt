@@ -7,4 +7,5 @@ add_executable(advent_of_code_2024 main.cpp
   Day.h
   days/day1.h
   days/day2.h
-  days/day3.h)
+  days/day3.h
+  days/day4.h)
