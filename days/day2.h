@@ -32,14 +32,12 @@ auto is_safe(const std::vector<int> &report) -> std::optional<int> {
 }
 
 class Day2 : public Day<std::vector<std::vector<int>>> {
-using Input = std::vector<std::vector<int>>;
-
 public:
     auto num() const -> int override {
         return 2;
     }
 
-    auto example_input_str() const -> std::stringstream override {
+    auto example_input_str1() const -> std::stringstream override {
         return std::stringstream(R"(7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1

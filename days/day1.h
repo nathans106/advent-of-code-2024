@@ -11,13 +11,11 @@
 
 class Day1 : public Day<std::array<std::vector<int>, 2>> {
 public:
-    using Input = std::array<std::vector<int>, 2>;
-
     auto num() const -> int override {
         return 1;
     }
 
-    auto example_input_str() const -> std::stringstream override {
+    auto example_input_str1() const -> std::stringstream override {
         return std::stringstream(R"(3   4
 4   3
 2   5
