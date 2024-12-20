@@ -94,6 +94,14 @@ public:
                     num_safe++;
                     continue;
                 }
+                if (failing_index.value() > 0) {
+                    new_report = report;
+                    new_report.erase(new_report.begin() + failing_index.value() - 1);
+                    if (!is_safe(new_report).has_value()) {
+                        num_safe++;
+                        continue;
+                    }
+                }
             } else {
                 num_safe++;
             }
