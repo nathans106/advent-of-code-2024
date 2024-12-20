@@ -7,7 +7,7 @@
 #include <sstream>
 #include <vector>
 
-auto is_safe(const std::vector<int> &report) -> std::optional<int> {
+auto first_unsafe_level(const std::vector<int> &report) -> std::optional<int> {
     std::optional<bool> is_positive = std::nullopt;
     int i = 0;
     for (const auto &[level1, level2] : report | std::ranges::views::pairwise) {
@@ -66,7 +66,7 @@ public:
         int num_safe = 0;
 
         for (const auto &report : input) {
-            if (!is_safe(report).has_value()) {
+            if (!first_unsafe_level(report).has_value()) {
                 num_safe++;
             }
         }
@@ -78,24 +78,24 @@ public:
         int num_safe = 0;
 
         for (const auto &report : input) {
-            const auto failing_index = is_safe(report);
+            const auto failing_index = first_unsafe_level(report);
             if (failing_index.has_value()) {
                 auto new_report = report;
                 new_report.erase(new_report.begin() + failing_index.value());
-                if (!is_safe(new_report).has_value()) {
+                if (!first_unsafe_level(new_report).has_value()) {
                     num_safe++;
                     continue;
                 }
                 new_report = report;
                 new_report.erase(new_report.begin() + failing_index.value() + 1);
-                if (!is_safe(new_report).has_value()) {
+                if (!first_unsafe_level(new_report).has_value()) {
                     num_safe++;
                     continue;
                 }
                 if (failing_index.value() > 0) {
                     new_report = report;
                     new_report.erase(new_report.begin() + failing_index.value() - 1);
-                    if (!is_safe(new_report).has_value()) {
+                    if (!first_unsafe_level(new_report).has_value()) {
                         num_safe++;
                         continue;
                     }
