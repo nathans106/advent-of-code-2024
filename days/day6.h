@@ -133,7 +133,6 @@ public:
                     continue;
                 }
 
-                const auto new_obstruction = std::pair{x, y};
                 auto new_grid = input.grid;
                 new_grid[x][y] = Space::obstructed;
                 auto guard = input.guard_start;
