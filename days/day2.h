@@ -7,6 +7,25 @@
 #include <sstream>
 #include <vector>
 
+class Day2Parser : public InputParser<std::vector<std::vector<int>>> {
+    void parse_line(const std::string &line) override {
+        auto re_line = line;
+        std::vector<int> line_vec;
+        std::regex re(R"(\d+)");
+        for (std::smatch match; std::regex_search(re_line, match, re);) {
+            line_vec.push_back(std::stoi(match.str()));
+            re_line = match.suffix();
+        }
+        m_input.push_back(line_vec);
+    }
+
+    Input get_input() override {
+        return m_input;
+    }
+
+    Input m_input;
+};
+
 auto first_unsafe_level(const std::vector<int> &report) -> std::optional<int> {
     std::optional<bool> is_positive = std::nullopt;
     int i = 0;
@@ -31,7 +50,7 @@ auto first_unsafe_level(const std::vector<int> &report) -> std::optional<int> {
     return std::nullopt;
 }
 
-class Day2 : public Day<std::vector<std::vector<int>>> {
+class Day2 : public Day<Day2Parser> {
 public:
     auto num() const -> int override {
         return 2;
@@ -44,22 +63,6 @@ public:
 1 3 2 4 5
 8 6 4 4 1
 1 3 6 7 9)");
-    }
-
-    auto parse_input(std::basic_istream<char> &input_str) const -> Input override {
-        Input input;
-        std::string line;
-        while(std::getline(input_str, line)) {
-            std::vector<int> line_vec;
-            std::regex re(R"(\d+)");
-            auto i = 0;
-            for (std::smatch match; std::regex_search(line, match, re);) {
-                line_vec.push_back(std::stoi(match.str()));
-                line = match.suffix();
-            }
-            input.push_back(line_vec);
-        }
-        return input;
     }
 
     auto part1(const Input &input) const -> int override {

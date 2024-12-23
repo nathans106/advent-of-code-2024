@@ -47,7 +47,19 @@ private:
     std::vector<std::string> m_data;
 };
 
-class Day4 : public Day<Crossword> {
+class Day4Parser : public InputParser<Crossword> {
+    void parse_line(const std::string &line) override {
+        m_input.push_back(line);
+    }
+
+    Input get_input() override {
+        return {std::move(m_input)};
+    }
+
+    std::vector<std::string> m_input;
+};
+
+class Day4 : public Day<Day4Parser> {
 public:
     auto num() const -> int override {
         return 4;
@@ -64,15 +76,6 @@ SMSMSASXSS
 SAXAMASAAA
 MAMMMXMMMM
 MXMXAXMASX)");
-    }
-
-    auto parse_input(std::basic_istream<char> &input_str) const -> Input override {
-        std::vector<std::string> input;
-        std::string line;
-        while(std::getline(input_str, line)) {
-            input.push_back(line);
-        }
-        return input;
     }
 
     auto part1(const Input &input) const -> int override {

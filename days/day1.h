@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Day.h"
+#include "../input_parser.h"
 
 #include <algorithm>
 #include <array>
@@ -9,7 +10,27 @@
 #include <vector>
 #include <utility>
 
-class Day1 : public Day<std::array<std::vector<int>, 2>> {
+
+class Day1Parser : public InputParser<std::array<std::vector<int>, 2>> {
+    void parse_line(const std::string& line) override {
+        auto re_line = line;
+        std::regex re(R"(\d+)");
+        auto i = 0;
+        for (std::smatch match; std::regex_search(re_line, match, re);) {
+            assert(i < 2);
+            m_input[i++].push_back(std::stoi(match.str()));
+            re_line = match.suffix();
+        }
+    }
+
+    Input get_input() override {
+        return m_input;
+    }
+
+    Input m_input;
+};
+
+class Day1 : public Day<Day1Parser> {
 public:
     auto num() const -> int override {
         return 1;
@@ -22,21 +43,6 @@ public:
 1   3
 3   9
 3   3)");
-    }
-
-    auto parse_input(std::basic_istream<char> & input_str) const -> Input override {
-        Input input;
-        std::string line;
-        while(std::getline(input_str, line)) {
-            std::regex re(R"(\d+)");
-            auto i = 0;
-            for (std::smatch match; std::regex_search(line, match, re);) {
-                assert(i < 2);
-                input[i++].push_back(std::stoi(match.str()));
-                line = match.suffix();
-            }
-        }
-        return input;
     }
 
     auto part1(const Input &input) const -> int override {
