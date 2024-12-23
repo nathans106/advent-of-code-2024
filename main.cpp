@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 #include <cassert>
-#include "days/day1.h"
+#include "days/day5.h"
 
 auto read_input(int day_num) -> std::ifstream {
     std::filesystem::path file_path("inputs/day" + std::to_string(day_num) + ".txt");
@@ -12,7 +12,7 @@ auto read_input(int day_num) -> std::ifstream {
     return file;
 }
 
-using ToRun = Day1;
+using ToRun = Day5;
 
 int main() {
     const ToRun day;
