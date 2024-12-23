@@ -10,8 +10,8 @@ Nathan Samra's attempt at [Advent of Code 2024](https://adventofcode.com/).
 | 2   | :star: | :star: |
 | 3   | :star: | :star: |
 | 4   | :star: |        |
-| 5   |        |        |
-| 6   |        |        |
+| 5   | :star: | :star: |
+| 6   | :star: |        |
 | 7   |        |        |
 | 8   |        |        |
 | 9   |        |        |

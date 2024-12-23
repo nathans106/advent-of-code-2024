@@ -7,19 +7,29 @@
 #include <vector>
 #include <cassert>
 
+struct Guard {
+    std::pair<int, int> pos;
+    std::pair<int, int> dir;
+
+    bool operator<(const Guard& other) const {
+        return pos < other.pos && dir < other.dir;
+    }
+};
+
 enum class Space {
     empty,
     obstructed
 };
 
 struct Room {
-    std::pair<int, int> start_pos;
+    Guard guard_start;
     std::vector<std::vector<Space>> grid;
 };
 
 class Day6Parser : public InputParser<Room> {
     void parse_line(const std::string &line) override {
         std::vector<Space> row;
+        m_input.guard_start.dir = {-1, 0};
         for (const auto [i, c] : line | std::ranges::views::enumerate) {
             switch (c) {
                 case '.': {
@@ -32,7 +42,7 @@ class Day6Parser : public InputParser<Room> {
                 }
                 case '^': {
                     const auto cur_row = m_input.grid.size();
-                    m_input.start_pos = {cur_row, i};
+                    m_input.guard_start.pos = {cur_row, i};
                     row.push_back(Space::empty);
                     break;
                 }
@@ -51,6 +61,33 @@ class Day6Parser : public InputParser<Room> {
 
     Input m_input;
 };
+
+std::optional<Guard> next_guard_pos(const Guard& cur_guard, const std::vector<std::vector<Space>>& grid) {
+    auto guard = cur_guard;
+    while(true) {
+        const auto next_pos = std::pair(guard.pos.first + guard.dir.first, guard.pos.second + guard.dir.second);
+        if (next_pos.first >= grid.size()) {
+            return std::nullopt;
+        }
+        const auto& row = grid[next_pos.first];
+        if (next_pos.second >= row.size()) {
+            return std::nullopt;
+        }
+        const auto space = row[next_pos.second];
+        if (space == Space::empty) {
+            return Guard{next_pos, guard.dir};
+        }
+        if (guard.dir == std::pair{-1, 0}) {
+            guard.dir = {0,1};
+        } else if (guard.dir == std::pair{0,1}) {
+            guard.dir = {1,0};
+        } else if (guard.dir == std::pair{1,0}) {
+            guard.dir = {0,-1};
+        } else if (guard.dir == std::pair{0,-1}) {
+            guard.dir = {-1,0};
+        }
+    }
+}
 
 class Day6 : public Day<Day6Parser> {
 public:
@@ -73,44 +110,51 @@ public:
 
     auto part1(const Input &input) const -> int override {
         const auto & grid = input.grid;
-        std::set<std::pair<int, int>> visited = {input.start_pos};
-        std::pair<int, int> cur_pos = input.start_pos;
-        std::pair<int, int> cur_dir = {-1, 0};
-        bool in_bounds = true;
-        while(in_bounds) {
-            while(true) {
-                const auto next_pos = std::pair(cur_pos.first + cur_dir.first, cur_pos.second + cur_dir.second);
-                if (next_pos.first >= grid.size()) {
-                    in_bounds = false;
-                    break;
-                }
-                const auto& row = grid[next_pos.first];
-                if (next_pos.second >= row.size()) {
-                    in_bounds = false;
-                    break;
-                }
-                const auto space = row[next_pos.second];
-                if (space == Space::empty) {
-                    cur_pos = next_pos;
-                    visited.insert(cur_pos);
-                    break;
-                }
-                if (cur_dir == std::pair{-1, 0}) {
-                    cur_dir = {0,1};
-                } else if (cur_dir == std::pair{0,1}) {
-                    cur_dir = {1,0};
-                } else if (cur_dir == std::pair{1,0}) {
-                    cur_dir = {0,-1};
-                } else if (cur_dir == std::pair{0,-1}) {
-                    cur_dir = {-1,0};
-                }
+        auto guard = input.guard_start;
+        std::set<std::pair<int, int>> visited = {guard.pos};
+        while(true) {
+            auto maybe_guard = next_guard_pos(guard, grid);
+            if (!maybe_guard.has_value()) {
+                break;
             }
+            guard = maybe_guard.value();
+            visited.insert(guard.pos);
         }
         return visited.size();
     }
 
     auto part2(const Input &input) const -> int override {
-        return 0;
+        auto count = 0;
+        for (auto x = 0; x < input.grid.size(); ++x) {
+            const auto &row = input.grid[x];
+            for (auto y = 0; y < row.size(); ++y) {
+                if (input.grid[x][y] == Space::obstructed) {
+                    // Already obstruction, do nothing
+                    continue;
+                }
+
+                const auto new_obstruction = std::pair{x, y};
+                auto new_grid = input.grid;
+                new_grid[x][y] = Space::obstructed;
+                auto guard = input.guard_start;
+                std::set<Guard> old_guards = {guard};
+                while(true) {
+                    auto maybe_guard = next_guard_pos(guard, new_grid);
+                    if (!maybe_guard.has_value()) {
+                        break;
+                    }
+
+                    guard = maybe_guard.value();
+                    if (old_guards.contains(guard)) {
+                        count++;
+                        break;
+                    }
+                    old_guards.insert(guard);
+                }
+            }
+        }
+
+        return count;
     }
 
 };
