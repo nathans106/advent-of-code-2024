@@ -66,6 +66,32 @@ bool is_valid(const std::vector<int>& update, const std::multimap<int, int>& ord
     return true;
 }
 
+bool can_be_next(const int page, const std::set<int>& remaining, const std::multimap<int, int>& ordering) {
+    const auto [order_begin, order_end] = ordering.equal_range(page);
+    for (auto order_page = order_begin; order_page != order_end; ++order_page) {
+        if (remaining.contains(order_page->second)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+std::vector<int> fix_order(const std::vector<int>& update, const std::multimap<int, int>& ordering) {
+    std::vector<int> fixed_update;
+    fixed_update.reserve(update.size());
+    std::set remaining(update.begin(), update.end());
+    while(!remaining.empty()) {
+        for(const auto& page: remaining) {
+            if (can_be_next(page, remaining, ordering)) {
+                fixed_update.push_back(page);
+                remaining.erase(page);
+                break;
+            }
+        }
+    }
+    return fixed_update;
+}
+
 class Day5 : public Day<Day5Parser> {
 public:
     auto num() const -> int override {
@@ -115,7 +141,15 @@ public:
     }
 
     auto part2(const Input &input) const -> int override {
-        return 0;
+        auto sum = 0;
+        for (const auto& update : input.updates) {
+            if (!is_valid(update, input.ordering)) {
+                const auto fixed_update = fix_order(update, input.ordering);
+                const auto middle_value = fixed_update[fixed_update.size() / 2];
+                sum += middle_value;
+            }
+        }
+        return sum;
     }
 
 };
