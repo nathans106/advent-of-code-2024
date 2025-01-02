@@ -108,7 +108,7 @@ public:
 ......#...)");
     }
 
-    auto part1(const Input &input) const -> int override {
+    auto part1(const Input &input) const -> long long override {
         const auto & grid = input.grid;
         auto guard = input.guard_start;
         std::set<std::pair<int, int>> visited = {guard.pos};
@@ -123,7 +123,7 @@ public:
         return visited.size();
     }
 
-    auto part2(const Input &input) const -> int override {
+    auto part2(const Input &input) const -> long long override {
         auto count = 0;
         for (auto x = 0; x < input.grid.size(); ++x) {
             const auto &row = input.grid[x];

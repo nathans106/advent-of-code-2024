@@ -45,7 +45,7 @@ public:
 3   3)");
     }
 
-    auto part1(const Input &input) const -> int override {
+    auto part1(const Input &input) const -> long long override {
         auto in1 = input[0];
         auto in2 = input[1];
         std::ranges::sort(in1);
@@ -56,7 +56,7 @@ public:
         return std::ranges::fold_left(distances, 0, std::plus{});
     }
 
-    auto part2(const Input &input) const -> int override {
+    auto part2(const Input &input) const -> long long override {
         auto in1 = input[0];
         auto in2 = input[1];
         std::map<int, int> frequencies;

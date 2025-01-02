@@ -65,7 +65,7 @@ public:
 1 3 6 7 9)");
     }
 
-    auto part1(const Input &input) const -> int override {
+    auto part1(const Input &input) const -> long long override {
         int num_safe = 0;
 
         for (const auto &report : input) {
@@ -77,7 +77,7 @@ public:
         return num_safe;
     }
 
-    auto part2(const Input &input) const -> int override {
+    auto part2(const Input &input) const -> long long override {
         int num_safe = 0;
 
         for (const auto &report : input) {

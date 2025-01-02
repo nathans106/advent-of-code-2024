@@ -78,7 +78,7 @@ MAMMMXMMMM
 MXMXAXMASX)");
     }
 
-    auto part1(const Input &input) const -> int override {
+    auto part1(const Input &input) const -> long long override {
         std::size_t xmas_count = 0;
         for (auto x = 0; x < input.csize(); ++x) {
             const auto& line = input.col(x);
@@ -104,7 +104,7 @@ MXMXAXMASX)");
         return xmas_count;
     }
 
-    auto part2(const Input &input) const -> int override {
+    auto part2(const Input &input) const -> long long override {
         std::size_t xmas_count = 0;
         for (auto x = 0; x < input.csize(); ++x) {
             const auto& line = input.col(x);

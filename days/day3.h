@@ -31,7 +31,7 @@ public:
         return std::stringstream(R"(xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5)))");
     }
 
-    auto part1(const Input &input) const -> int override {
+    auto part1(const Input &input) const -> long long override {
         std::regex re(R"(mul\((\d+),(\d+)\))");
         std::smatch match;
         auto sum = 0;
@@ -46,7 +46,7 @@ public:
         return sum;
     }
 
-    auto part2(const Input &input) const -> int override {
+    auto part2(const Input &input) const -> long long override {
         std::regex re(R"((?:mul\((\d+),(\d+)\))|(?:do\(\))|(?:don't\(\)))");
         std::smatch match;
         auto sum = 0;

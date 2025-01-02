@@ -11,4 +11,5 @@ add_executable(advent_of_code_2024 main.cpp
   days/day4.h
   input_parser.h
   days/day5.h
-  days/day6.h)
+  days/day6.h
+  days/day7.h)

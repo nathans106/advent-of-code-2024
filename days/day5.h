@@ -129,7 +129,7 @@ public:
 97,13,75,29,47)");
     }
 
-    auto part1(const Input &input) const -> int override {
+    auto part1(const Input &input) const -> long long override {
         auto sum = 0;
         for (const auto& update : input.updates) {
             if (is_valid(update, input.ordering)) {
@@ -140,7 +140,7 @@ public:
         return sum;
     }
 
-    auto part2(const Input &input) const -> int override {
+    auto part2(const Input &input) const -> long long override {
         auto sum = 0;
         for (const auto& update : input.updates) {
             if (!is_valid(update, input.ordering)) {
